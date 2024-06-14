@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='afc_imbalanced_learning',
+    name='afc_svm_imbalanced_learning',
     version='0.1.0',
     author='Peerakarn',
     author_email='peerakarn.jit@gmail.com',
