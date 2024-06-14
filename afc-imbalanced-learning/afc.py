@@ -2,6 +2,7 @@ import numpy as np
 from sklearn.svm import SVC
 from conformal_transformation import conformal_transform_kernel, calculate_tau_squared
 from distance import hyperspace_l2_distance_squared
+from kernel import laplacian_kernel
 
 
 class AFSCTSvm:
@@ -10,6 +11,9 @@ class AFSCTSvm:
         self.C = C
         self.class_weight = class_weight
         self.kernel = kernel
+
+        if self.kernel is None:
+            self.kernel = laplacian_kernel
 
     def fit(self, X, y):
         self.X_train = X
