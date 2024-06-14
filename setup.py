@@ -3,8 +3,8 @@ from setuptools import setup, find_packages
 setup(
     name='afc_imbalanced_learning',
     version='0.1.0',
-    author='Your Name',
-    author_email='your.email@example.com',
+    author='Peerakarn',
+    author_email='peerakarn.jit@gmail.com',
     description='Simple implementation of the papar Adaptive Feature-Space Conformal Transformation for Imbalanced-Data Learning',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
