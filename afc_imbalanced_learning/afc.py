@@ -1,8 +1,8 @@
 import numpy as np
 from sklearn.svm import SVC
-from conformal_transformation import conformal_transform_kernel, calculate_tau_squared
-from distance import hyperspace_l2_distance_squared
-from kernel import laplacian_kernel
+from .conformal_transformation import conformal_transform_kernel, calculate_tau_squared
+from .distance import hyperspace_l2_distance_squared
+from .kernel import laplacian_kernel
 
 
 class AFSCTSvm:
