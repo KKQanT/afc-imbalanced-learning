@@ -26,7 +26,7 @@ where
 
 $$
 \begin{aligned}
- \tau_k^{2} = \frac{1}{M} \sum_{\textbf{x}_{s} \epsilon SV_{k}}{||\textbf{x}_{s} - \textbf{x}_k||^{2}}
+ \tau_k^{2} = \frac{1}{M} \sum_{\textbf{x}_s \epsilon SV_k} || \textbf{x}_s - \textbf{x}_k||^{2} ||
 \end{aligned}
 $$
 
