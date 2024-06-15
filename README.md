@@ -1,5 +1,5 @@
-# afc-imbalanced-learning
-A simple implementation of Adaptive Feature-Space Conformal Transformationfor Imbalanced-Data Learning.
+# Adaptive Feature-Space Conformal Transformation for Imbalanced-Data Learning for Kernel SVM
+A simple implementation of Adaptive Feature-Space Conformal Transformationfor any kernel SVM proposed in [2]
 
 ## Core concept
 In [1], the idea of inceasing the separability (margin) of classes for kernel SVM, can be achieved by magnify the spatial resolution in the region around the boundary in the hyperspace, the non-linear serface where $\textbf{x}$ has been already mapped to $\phi(\textbf{x})$ using kernel tricks. 
@@ -56,6 +56,11 @@ It has been stated in [2] that the $\tau_k^{2}$ will be scaled with a larger fac
 
 ## Example Usage
 
+***installation***
+```
+pip install afc-svm-imbalanced-learning
+```
+***Usage***
 ```
 from afc_imbalanced_learning import AFSCTSvm
 
@@ -66,6 +71,8 @@ y_pred = afc_svm.predict(X_test)
 
 what `.fit(X_train, y_train)` does is it train kernel svm with laplacian kernel $K(\textbf{x}, \textbf{x}') = e^{-\gamma|\textbf{x} - \textbf{x}'|}$ as used in [2], then it estimates the location of boundary by extracting support vectors and it then calculate $\tau_k$ for every support vectors and then calculate $D(\textbf{x})$ to use for conformal transformation where we'll obtain $\tilde{K}(\textbf{x}, \textbf{x})$ to train our new SVM. We'll then use the new improved Kernel SVM to predict when `.predict` is called.
 
+***Custom initial kernel***
+<br/>
 you can use your own custom kernel function by parse it to kernel parameter
 ```
 from sklearn.metrics.pairwise import rbf_kernel
