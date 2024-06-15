@@ -36,7 +36,7 @@ In this implementation, we use the $\tau_k^{2}$ proposed in [2]:
 
 $$
 \begin{aligned}
- \tau_k^{2} = AVG_{\textbf{x}_s \epsilon \{\textbf{x}_{s} \epsilon SV | \ || \phi{(\textbf{x}_s)} - \phi{(\textbf{x}_k)} ||^2 < M, \ y_s \ne y_k, \}} (|| \phi{(\textbf{x}_s)} - \phi{(\textbf{x}_k)} ||^2)
+ \tau_k^{2} = AVG_{\textbf{x}_s \epsilon \{\textbf{x}_s \epsilon SV | \ || \phi{(\textbf{x}_s)} - \phi{(\textbf{x}_k)} ||^2 < M, \ y_s \ne y_k, \}} (|| \phi{(\textbf{x}_s)} - \phi{(\textbf{x}_k)} ||^2)
 \end{aligned}
 $$
 
@@ -46,7 +46,7 @@ Note that given kernel function, $K(\textbf{x}, \textbf{x}')$ is known but the m
 
 $$
 \begin{aligned}
-    | \phi{(\textbf{x}_s)} - \phi{(\textbf{x}_k)} ||^2 = K(\textbf{x}_s, \textbf{x}_s) +  K(\textbf{x}_k, \textbf{x}_k) - 2K(\textbf{x}_{s}, \textbf{x}_k)
+    | \phi{(\textbf{x}_s)} - \phi{(\textbf{x}_k)} ||^2 = K(\textbf{x}_s, \textbf{x}_s) +  K(\textbf{x}_k, \textbf{x}_k) - 2K(\textbf{x}_s, \textbf{x}_k)
 \end{aligned}
 $$
 
