@@ -7,13 +7,17 @@ from .kernel import laplacian_kernel
 
 class AFSCTSvm:
 
-    def __init__(self, C=1, class_weight="balanced", kernel=None):
+    def __init__(
+        self, C=1, class_weight="balanced", kernel=None, ignore_outlier_svs=True
+    ):
         self.C = C
         self.class_weight = class_weight
         self.kernel = kernel
 
         if self.kernel is None:
             self.kernel = laplacian_kernel
+
+        self.ignore_outlier_svs = ignore_outlier_svs
 
     def fit(self, X, y):
         self.X_train = X
@@ -69,6 +73,19 @@ class AFSCTSvm:
         support_vectors_class = self.y_train[self.svm.support_]
         support_vectors_pos = support_vectors[np.where(support_vectors_class == 1)]
         support_vectors_neg = support_vectors[np.where(support_vectors_class == 0)]
+
+        if self.ignore_outlier_svs:
+            
+            support_vectors_pos_pred = self.svm.predict(
+                self.kernel(support_vectors_pos, self.X_train)
+            )
+            support_vectors_pos = support_vectors_pos[support_vectors_pos_pred == 1]
+
+            support_vectors_neg_pred = self.svm.predict(
+                self.kernel(support_vectors_neg, self.X_train)
+            )
+            support_vectors_neg = support_vectors_neg[support_vectors_neg_pred == 0]
+
         self.support_vectors_pos = support_vectors_pos
         self.support_vectors_neg = support_vectors_neg
         return support_vectors_pos, support_vectors_neg

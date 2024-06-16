@@ -1,0 +1,5 @@
+#[0.2.0]
+
+### New Features
+* We will now ignore support vectors that fell into region of another class when compute D(x)
+* ignore_outlier_svs=False will use all support vectors to calculate D(x)
