@@ -67,6 +67,13 @@ class AFSCTSvm:
             X, self.X_train, computed_kernel, self.support_vectors, self.tau_squareds
         )
         return self.svm.predict_proba(computed_conformal_transform_kernel)
+    
+    def decision_function(self, X):
+        computed_kernel = self.kernel(X, self.X_train)
+        computed_conformal_transform_kernel = conformal_transform_kernel(
+            X, self.X_train, computed_kernel, self.support_vectors, self.tau_squareds
+        )
+        return self.svm.decision_function(computed_conformal_transform_kernel)
 
     def extract_separate_support_vectors(self):
         support_vectors = self.X_train[self.svm.support_]
