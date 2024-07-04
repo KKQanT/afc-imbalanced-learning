@@ -9,15 +9,10 @@ from ucimlrepo import fetch_ucirepo
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.svm import SVC
-from sklearn.metrics import confusion_matrix
 
 from afc_imbalanced_learning.kernel import laplacian_kernel
 
-def calculate_gmean(y_true, y_pred):
-  tn, fp, fn, tp = confusion_matrix(y_true, y_pred).ravel()
-  specificity = tn / (tn+fp)
-  sensitivity = tp / (tp+fn)
-  return np.sqrt(specificity * sensitivity)
+from afc_imbalanced_learning.metrics import calculate_gmean
 
 class TestAFSCTSvm(unittest.TestCase):
 
