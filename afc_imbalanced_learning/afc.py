@@ -27,7 +27,7 @@ class AFSCTSvm:
             C=self.C,
             class_weight=self.class_weight,
             kernel="precomputed",
-            probability=True,
+            probability=False,
         )
 
         computed_kernel = self.kernel(self.X_train, self.X_train)
@@ -50,7 +50,7 @@ class AFSCTSvm:
             C=self.C,
             class_weight=self.class_weight,
             kernel="precomputed",
-            probability=True,
+            probability=False,
         )
         self.svm.fit(computed_conformal_transform_kernel, self.y_train)
 
@@ -61,7 +61,7 @@ class AFSCTSvm:
             C=self.C,
             class_weight=self.class_weight,
             kernel="precomputed",
-            probability=True,
+            probability=False,
         )
         self.svm.fit(computed_conformal_transform_kernel, self.y_train)
 
@@ -73,7 +73,7 @@ class AFSCTSvm:
             C=self.C,
             class_weight=self.class_weight,
             kernel="precomputed",
-            probability=True,
+            probability=False,
         )
 
         computed_kernel = self.kernel(self.X_train, self.X_train)
