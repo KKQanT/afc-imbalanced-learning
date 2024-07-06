@@ -19,7 +19,7 @@ class AFSCTSvm:
 
         self.ignore_outlier_svs = ignore_outlier_svs
 
-    def fit(self, X, y):
+    def deprecated_fit(self, X, y):
         self.X_train = X
         self.y_train = y
 
@@ -53,6 +53,46 @@ class AFSCTSvm:
             probability=True,
         )
         self.svm.fit(computed_conformal_transform_kernel, self.y_train)
+
+    def fit(self, X, y):
+        computed_conformal_transform_kernel = self.get_conformal_transformed_kernel(X, y)
+        
+        self.svm = SVC(
+            C=self.C,
+            class_weight=self.class_weight,
+            kernel="precomputed",
+            probability=True,
+        )
+        self.svm.fit(computed_conformal_transform_kernel, self.y_train)
+
+    def get_conformal_transformed_kernel(self, X, y):
+        self.X_train = X
+        self.y_train = y
+
+        self.svm = SVC(
+            C=self.C,
+            class_weight=self.class_weight,
+            kernel="precomputed",
+            probability=True,
+        )
+
+        computed_kernel = self.kernel(self.X_train, self.X_train)
+        self.svm.fit(computed_kernel, self.y_train)
+
+        support_vectors_pos, support_vectors_neg = (
+            self.extract_separate_support_vectors()
+        )
+        tau_squareds = self.calculate_tau_squared()
+        support_vectors = np.vstack((support_vectors_pos, support_vectors_neg))
+
+        self.tau_squareds = tau_squareds
+        self.support_vectors = support_vectors
+
+        computed_conformal_transform_kernel = conformal_transform_kernel(
+            self.X_train, self.X_train, computed_kernel, support_vectors, tau_squareds
+        )
+
+        return computed_conformal_transform_kernel
 
     def predict(self, X):
         computed_kernel = self.kernel(X, self.X_train)
