@@ -19,65 +19,52 @@ class AFSCTSvm:
 
         self.ignore_outlier_svs = ignore_outlier_svs
 
-    def deprecated_fit(self, X, y):
-        self.X_train = X
-        self.y_train = y
+    def fit(self, X, y, sample_weight=None):
+        computed_conformal_transform_kernel = self.get_conformal_transformed_kernel(X, y, sample_weight)
 
-        self.svm = SVC(
-            C=self.C,
-            class_weight=self.class_weight,
-            kernel="precomputed",
-            probability=False,
-        )
-
-        computed_kernel = self.kernel(self.X_train, self.X_train)
-        self.svm.fit(computed_kernel, self.y_train)
-
-        support_vectors_pos, support_vectors_neg = (
-            self.extract_separate_support_vectors()
-        )
-        tau_squareds = self.calculate_tau_squared()
-        support_vectors = np.vstack((support_vectors_pos, support_vectors_neg))
-
-        self.tau_squareds = tau_squareds
-        self.support_vectors = support_vectors
-
-        computed_conformal_transform_kernel = conformal_transform_kernel(
-            self.X_train, self.X_train, computed_kernel, support_vectors, tau_squareds
-        )
-
-        self.svm = SVC(
-            C=self.C,
-            class_weight=self.class_weight,
-            kernel="precomputed",
-            probability=False,
-        )
-        self.svm.fit(computed_conformal_transform_kernel, self.y_train)
-
-    def fit(self, X, y):
-        computed_conformal_transform_kernel = self.get_conformal_transformed_kernel(X, y)
+        if sample_weight is not None:
+            self.svm = SVC(
+                C=self.C,
+                kernel="precomputed", # set class weight to None when using sample weights
+                probability=False,
+            )
+            self.svm.fit(computed_conformal_transform_kernel, self.y_train, sample_weight=sample_weight)
+        else:
         
-        self.svm = SVC(
-            C=self.C,
-            class_weight=self.class_weight,
-            kernel="precomputed",
-            probability=False,
-        )
-        self.svm.fit(computed_conformal_transform_kernel, self.y_train)
+            self.svm = SVC(
+                C=self.C,
+                class_weight=self.class_weight,
+                kernel="precomputed",
+                probability=False,
+            )
+            self.svm.fit(computed_conformal_transform_kernel, self.y_train)
 
-    def get_conformal_transformed_kernel(self, X, y):
+    def get_conformal_transformed_kernel(self, X, y, sample_weight=None):
         self.X_train = X
         self.y_train = y
 
-        self.svm = SVC(
-            C=self.C,
-            class_weight=self.class_weight,
-            kernel="precomputed",
-            probability=False,
-        )
+        if sample_weight is not None:
+            self.svm = SVC(
+                C=self.C,
+                kernel="precomputed",
+                probability=False,
+            )
 
-        computed_kernel = self.kernel(self.X_train, self.X_train)
-        self.svm.fit(computed_kernel, self.y_train)
+            computed_kernel = self.kernel(self.X_train, self.X_train)
+            self.svm.fit(computed_kernel, self.y_train, sample_weight=sample_weight)
+
+        else:
+
+
+            self.svm = SVC(
+                C=self.C,
+                class_weight=self.class_weight,
+                kernel="precomputed",
+                probability=False,
+            )
+
+            computed_kernel = self.kernel(self.X_train, self.X_train)
+            self.svm.fit(computed_kernel, self.y_train)
 
         support_vectors_pos, support_vectors_neg = (
             self.extract_separate_support_vectors()
