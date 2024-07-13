@@ -20,7 +20,7 @@ class AFSCTSvm:
         self.ignore_outlier_svs = ignore_outlier_svs
 
     def fit(self, X, y, sample_weight=None):
-        computed_conformal_transform_kernel = self.get_conformal_transformed_kernel(X, y, sample_weight)
+        computed_conformal_transform_kernel = self.fit_conformal_transformed_kernel(X, y, sample_weight)
 
         if sample_weight is not None:
             self.svm = SVC(
@@ -39,7 +39,7 @@ class AFSCTSvm:
             )
             self.svm.fit(computed_conformal_transform_kernel, self.y_train)
 
-    def get_conformal_transformed_kernel(self, X, y, sample_weight=None):
+    def fit_conformal_transformed_kernel(self, X, y, sample_weight=None):
         self.X_train = X
         self.y_train = y
 
@@ -80,19 +80,20 @@ class AFSCTSvm:
         )
 
         return computed_conformal_transform_kernel
-
-    def predict(self, X):
+    
+    def get_computed_conformal_transform_kernel(self, X):
         computed_kernel = self.kernel(X, self.X_train)
         computed_conformal_transform_kernel = conformal_transform_kernel(
             X, self.X_train, computed_kernel, self.support_vectors, self.tau_squareds
         )
+        return computed_conformal_transform_kernel
+
+    def predict(self, X):
+        computed_conformal_transform_kernel = self.get_computed_conformal_transform_kernel(X)
         return self.svm.predict(computed_conformal_transform_kernel)
 
     def predict_proba(self, X):
-        computed_kernel = self.kernel(X, self.X_train)
-        computed_conformal_transform_kernel = conformal_transform_kernel(
-            X, self.X_train, computed_kernel, self.support_vectors, self.tau_squareds
-        )
+        computed_conformal_transform_kernel = self.get_computed_conformal_transform_kernel(X)
         return self.svm.predict_proba(computed_conformal_transform_kernel)
     
     def decision_function(self, X):

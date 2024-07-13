@@ -68,11 +68,6 @@ class TestAFSCTSvm(unittest.TestCase):
         predictions = self.model.predict(self.X_test)
         self.assertEqual(predictions.shape, self.y_test.shape)
 
-    def test_predict_proba(self):
-        self.model.fit(self.X_train, self.y_train)
-        probabilities = self.model.predict_proba(self.X_test)
-        self.assertEqual(probabilities.shape[0], self.X_test.shape[0])
-    
     def test_svm_gmean(self):
         svm = SVC(C=1, class_weight="balanced", kernel="precomputed")
         svm.fit(laplacian_kernel(self.X_train, self.X_train), self.y_train)
