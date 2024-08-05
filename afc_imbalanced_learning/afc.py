@@ -8,11 +8,13 @@ from .kernel import laplacian_kernel
 class AFSCTSvm:
 
     def __init__(
-        self, C=1, class_weight="balanced", kernel=None, ignore_outlier_svs=True
+        self, C=1, class_weight="balanced", kernel=None, ignore_outlier_svs=True, probability=False, random_state=0
     ):
         self.C = C
         self.class_weight = class_weight
         self.kernel = kernel
+        self.probability = probability
+        self.random_state = random_state
 
         if self.kernel is None:
             self.kernel = laplacian_kernel
@@ -26,7 +28,8 @@ class AFSCTSvm:
             self.svm = SVC(
                 C=self.C,
                 kernel="precomputed", # set class weight to None when using sample weights
-                probability=False,
+                probability=self.probability,
+                random_state=self.random_state
             )
             self.svm.fit(computed_conformal_transform_kernel, self.y_train, sample_weight=sample_weight)
         else:
@@ -35,7 +38,9 @@ class AFSCTSvm:
                 C=self.C,
                 class_weight=self.class_weight,
                 kernel="precomputed",
-                probability=False,
+                probability=self.probability,
+                random_state=self.random_state
+
             )
             self.svm.fit(computed_conformal_transform_kernel, self.y_train)
 
@@ -47,7 +52,9 @@ class AFSCTSvm:
             self.svm = SVC(
                 C=self.C,
                 kernel="precomputed",
-                probability=False,
+                probability=self.probability,
+                random_state=self.random_state
+
             )
 
             computed_kernel = self.kernel(self.X_train, self.X_train)
@@ -60,7 +67,9 @@ class AFSCTSvm:
                 C=self.C,
                 class_weight=self.class_weight,
                 kernel="precomputed",
-                probability=False,
+                probability=self.probability,
+                random_state=self.random_state
+
             )
 
             computed_kernel = self.kernel(self.X_train, self.X_train)
