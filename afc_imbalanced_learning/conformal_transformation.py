@@ -16,15 +16,18 @@ def calculate_D(X, support_vectors, tau_squared):
     return np.exp(-l1_dist / tau_squared).sum(axis=1)
 
 
-def calculate_tau_squared(distance_mat):
+def calculate_tau_squared(distance_mat, eta=None):
     M = (np.max(distance_mat, axis=1) + np.min(distance_mat, axis=1)) / 2
     mask = distance_mat < M.reshape(-1, 1)
     masked_distance = distance_mat * mask
 
-    if distance_mat.shape[0] < distance_mat.shape[1]:
-        eta = 1
-    else:
-        eta = distance_mat.shape[1] / distance_mat.shape[0]
+    if eta is None:
+
+        if distance_mat.shape[0] < distance_mat.shape[1]:
+            eta = 1
+        else:
+            eta = distance_mat.shape[1] / distance_mat.shape[0]
+    
     tau_squared = masked_distance.sum(axis=1) / mask.sum(axis=1)
 
     return tau_squared * eta

@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='afc_svm_imbalanced_learning',
-    version='0.8.1',
+    version='0.9.0',
     author='Peerakarn',
     author_email='peerakarn.jit@gmail.com',
     description='Simple implementation of the papar Adaptive Feature-Space Conformal Transformation for Imbalanced-Data Learning',
