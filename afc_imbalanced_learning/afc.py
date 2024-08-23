@@ -8,7 +8,15 @@ from .kernel import laplacian_kernel
 class AFSCTSvm:
 
     def __init__(
-        self, C=1, class_weight="balanced", neg_eta=None, pos_eta=None, kernel=None, ignore_outlier_svs=True, probability=False, random_state=0
+        self, 
+        C=1, 
+        class_weight="balanced", 
+        neg_eta=None, 
+        pos_eta=None, 
+        kernel=None, 
+        ignore_outlier_svs=True, 
+        probability=False, 
+        random_state=0
     ):
         self.C = C
         self.class_weight = class_weight
@@ -80,6 +88,10 @@ class AFSCTSvm:
         support_vectors_pos, support_vectors_neg = (
             self.extract_separate_support_vectors()
         )
+
+        if self.neg_eta == "auto":
+            self.neg_eta = self.pos_eta * len(support_vectors_neg)/len(support_vectors_pos)
+
         tau_squareds = self.calculate_tau_squared()
         support_vectors = np.vstack((support_vectors_pos, support_vectors_neg))
 
@@ -134,9 +146,11 @@ class AFSCTSvm:
 
         self.support_vectors_pos = support_vectors_pos
         self.support_vectors_neg = support_vectors_neg
+
         return support_vectors_pos, support_vectors_neg
 
     def calculate_tau_squared(self):
+        print(f'calculating tau with pos eta: {self.pos_eta} and neg eta: {self.neg_eta}')
         distances = hyperspace_l2_distance_squared(
             self.support_vectors_pos, self.support_vectors_neg, self.kernel
         )
